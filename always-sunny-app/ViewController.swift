@@ -22,5 +22,11 @@ class ViewController: UIViewController {
 
 
     @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet var currentIcon: UIImageView!
+    @IBOutlet var currentLow: UILabel!
+    @IBOutlet var currentHigh: UILabel!
+    @IBOutlet var currentDate: UILabel!
+    @IBOutlet var currentCondition: UILabel!
 }
 

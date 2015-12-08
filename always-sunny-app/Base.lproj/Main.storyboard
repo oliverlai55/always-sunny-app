@@ -179,10 +179,17 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="currentCondition" destination="dNR-Qm-iFe" id="SYe-pN-h5z"/>
+                        <outlet property="currentDate" destination="w9y-07-CIh" id="6ZB-sO-gxj"/>
+                        <outlet property="currentHigh" destination="15w-Ox-kSd" id="Zn2-Jg-DYU"/>
+                        <outlet property="currentIcon" destination="dfW-8k-Kcp" id="qu4-uh-gKp"/>
+                        <outlet property="currentLow" destination="tr5-K8-12B" id="RJr-bX-vxj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="282" y="358"/>
+            <point key="canvasLocation" x="25" y="356"/>
         </scene>
     </scenes>
     <resources>

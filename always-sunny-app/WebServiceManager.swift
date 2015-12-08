@@ -9,10 +9,10 @@
 import Foundation
 
 struct WebServiceManager {
-    func fetchContacts(callback : ([Weather]) -> Void){
+    func fetchWeatherForecast(callback : ([Weather]) -> Void){
         
         let url = NSURL(string:
-            "http://api.openweathermap.org/data/2.5/forecast/daily?q=Atlanta,ga&mode=json&cnt=5&units=imperial")
+            "http://api.openweathermap.org/data/2.5/forecast/daily?q=Atlanta,ga&mode=json&cnt=5&units=imperial=0b66f0f8e1b5e15a5b59581c421348aa")
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession.sharedSession()
@@ -33,7 +33,6 @@ struct WebServiceManager {
                                     weatherList.append(newWeather)
                                 }
                                 callback(weatherList)
-                                
                     }
                 }
                 catch {
@@ -50,56 +49,73 @@ struct WebServiceManager {
     }
     
     
-//    self.dt = newDt
-//    self.min = newMin
-//    self.max = newMax
-//    self.pressure = newPressure
-//    self.humidity = newHumidity
-//    self.main = newMain
-//    self.icon = newIcon
-//    self.speed = newSpeed
-    
     private func parseWeather(jsonDict : [String:AnyObject]) -> Weather {
-            var newWeather = Weather()
-            //Use newWeather here
+        var newWeather = Weather()
+        //Use newWeather here
         
-        
-        
-        if let array = jsonDict["list"] as? [[String:AnyObject]] {
+        if let array = jsonDict["list"] as? [AnyObject] {
             for dict in array{
                 newWeather.dt = dict["dt"] as? Int
                 newWeather.humidity = dict["humidity"] as? Int
+                newWeather.pressure = dict["pressure"] as? Float
+                newWeather.speed = dict["speed"] as? Float
                 
                 if let temp = dict["temp"] as? [String:AnyObject]{
                     newWeather.min = temp["min"] as? Float
+                    newWeather.max = temp["max"] as? Float
                 }
-                
+                if let temp = dict["weather"] as? [AnyObject]{
+                    for weatherElement in temp{
+                        
+                        newWeather.main = weatherElement["main"] as? String
+                        newWeather.main = weatherElement["icon"] as? String
+                    }
+                }
             }
         }
-        
-//            newWeather.dt = jsonDict["phone"] as? String
-//            if let addressDict = jsonDict["address"] as? [String : AnyObject]
-//            {
-//                //Use the properties of addressDict here
-//                newWeather.streetAddress = addressDict["street"] as? String
-//                newWeather.city = addressDict["city"] as? String
-//                newWeather.zipCode = addressDict["zipcode"] as? String
-//            }
-//            if let fullName = jsonDict["name"] as? String {
-//                //Use fullName here
-//                let fullNameArray = fullName.componentsSeparatedByString(" ")
-//                if fullNameArray.count > 1 {
-//                    //Use fullNameArray here
-//                    newContact.firstName = fullNameArray[0]
-//                    newContact.lastName = fullNameArray[1]
-//                }
-//            }
-//            
-//            
-//            
-//            return newContact
-//         
         return newWeather
     }
     
+    func fetchWeatherCurrent(callback : (Weather?) -> Void) {
+        let url = NSURL(string: "http://api.openweathermap.org/data/2.5/weather?q=Atlanta&units=imperial&APPID=0b66f0f8e1b5e15a5b59581c421348aa")
+        
+        let request = NSURLRequest(URL: url!)
+        
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, err in
+            // (data, response, error) -> Void in
+            if err == nil {
+                //do something
+                var weatherCurrent = Weather()
+                
+                do{
+                    if let jsonObject : [String:AnyObject] =
+                        try  NSJSONSerialization.JSONObjectWithData(data!, options:
+                            NSJSONReadingOptions.AllowFragments) as? [String:AnyObject]{
+                                
+                                weatherCurrent = self.parseCurrentWeather(jsonObject)
+                    }
+                    callback(weatherCurrent)
+                    
+                }catch{
+                    callback(Weather())
+                    
+                }
+            }
+            else{
+                //if there is an error from the request
+                print("error: \(err)")
+            }
+        }
+          task.resume()
+}
+
+    private func parseCurrentWeather(jsonObject : [String:AnyObject]) -> Weather{
+        var newWeather = Weather()
+        newWeather.dt = jsonObject["dt"] as? Int
+        if let main = jsonObject["main"] as [String:AnyObject]{
+            newWeather.humidity = main["humidity"] as? Int
+            newWeather.temp_min = main["]
+        }
+        
 }
