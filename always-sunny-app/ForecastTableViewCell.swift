@@ -12,5 +12,10 @@ import UIKit
 
 class ForecastTableViewCell: UITableViewCell{
     
+    @IBOutlet var weeklyIconLabel: UIImageView!
+    @IBOutlet var weeklyDateLabel: UILabel!
+    @IBOutlet var weeklyConditionLabel: UILabel!
+    @IBOutlet var weeklyTempHighLabel: UILabel!
+    @IBOutlet var weeklyTempLowLabel: UILabel!
     
 }

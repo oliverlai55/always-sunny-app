@@ -81,7 +81,7 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="66" id="KXs-7f-Zms">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ForecastCellReuseID" rowHeight="66" id="KXs-7f-Zms" customClass="ForecastTableViewCell" customModule="always_sunny_app" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="600" height="66"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KXs-7f-Zms" id="KT6-LL-Vo7">
@@ -156,6 +156,13 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <animations/>
+                                        <connections>
+                                            <outlet property="weeklyConditionLabel" destination="MiN-gj-T0i" id="eMd-lz-GCI"/>
+                                            <outlet property="weeklyDateLabel" destination="1Uc-Jb-4tO" id="hYJ-d9-DT6"/>
+                                            <outlet property="weeklyIconLabel" destination="Uft-gz-sxG" id="VOo-ir-u03"/>
+                                            <outlet property="weeklyTempHighLabel" destination="7P9-gs-IE3" id="isa-Gz-h8c"/>
+                                            <outlet property="weeklyTempLowLabel" destination="2Id-si-1CV" id="nFz-IN-K0J"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -185,6 +192,7 @@
                         <outlet property="currentHigh" destination="15w-Ox-kSd" id="Zn2-Jg-DYU"/>
                         <outlet property="currentIcon" destination="dfW-8k-Kcp" id="qu4-uh-gKp"/>
                         <outlet property="currentLow" destination="tr5-K8-12B" id="RJr-bX-vxj"/>
+                        <outlet property="tableView" destination="lRf-DG-K7j" id="MOL-mT-a2a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

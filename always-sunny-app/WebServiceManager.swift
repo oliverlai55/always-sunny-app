@@ -10,9 +10,9 @@ import Foundation
 
 struct WebServiceManager {
     func fetchWeatherForecast(callback : ([Weather]) -> Void){
-        
+        print("oliver")
         let url = NSURL(string:
-            "http://api.openweathermap.org/data/2.5/forecast/daily?q=Atlanta,ga&mode=json&cnt=5&units=imperial=0b66f0f8e1b5e15a5b59581c421348aa")
+            "http://api.openweathermap.org/data/2.5/forecast/daily?q=Atlanta,ga&mode=json&cnt=5&units=imperial&APPID=0b66f0f8e1b5e15a5b59581c421348aa")
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession.sharedSession()
@@ -21,19 +21,18 @@ struct WebServiceManager {
             //Code goes here
             if err == nil {
                 //Processing code goes here
-                var weatherList = [Weather]()
-                
+                var newWeather = [Weather]()
+                print("if")
                 do {
-                    if let jsonArray : [ [String : AnyObject] ] =
-                        try NSJSONSerialization.JSONObjectWithData(data!, options:
-                            NSJSONReadingOptions.AllowFragments) as? [ [String:AnyObject] ] {
-                                for jsonDict in jsonArray {
-                                    //Use jsonDict here
-                                    let newWeather = self.parseWeather(jsonDict)
-                                    weatherList.append(newWeather)
+                    if let jsonDict : [ String : AnyObject ] = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? [ String:AnyObject ] {
+                                dispatch_async(dispatch_get_main_queue()) { print("insidetry")
+                                        //Use jsonDict here
+                                        print("insidefor")
+                                        newWeather = self.parseWeather(jsonDict)
+                                    
+                                    callback(newWeather)
                                 }
-                                callback(weatherList)
-                    }
+                        }
                 }
                 catch {
                     //We got an error
@@ -49,11 +48,12 @@ struct WebServiceManager {
     }
     
     
-    private func parseWeather(jsonDict : [String:AnyObject]) -> Weather {
-        var newWeather = Weather()
+    private func parseWeather(jsonDict : [String:AnyObject]) -> [Weather] {
+        var weekWeather = [Weather]()
         //Use newWeather here
         
         if let array = jsonDict["list"] as? [AnyObject] {
+            var newWeather = Weather()
             for dict in array{
                 newWeather.dt = dict["dt"] as? Int
                 newWeather.humidity = dict["humidity"] as? Int
@@ -71,9 +71,10 @@ struct WebServiceManager {
                         newWeather.icon = weatherElement["icon"] as? String
                     }
                 }
+                weekWeather.append(newWeather)
             }
         }
-        return newWeather
+        return weekWeather
     }
     
     func fetchWeatherCurrent(callback : (Weather?) -> Void) {
@@ -89,14 +90,14 @@ struct WebServiceManager {
                 var weatherCurrent = Weather()
                 
                 do{
-                    if let jsonObject : [String:AnyObject] =
-                        try  NSJSONSerialization.JSONObjectWithData(data!, options:
-                            NSJSONReadingOptions.AllowFragments) as? [String:AnyObject]{
+                    if let jsonObject : [String:AnyObject] = try  NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments) as? [String:AnyObject]{
+                                dispatch_async(dispatch_get_main_queue()) {
+                                    
+                                    weatherCurrent = self.parseCurrentWeather(jsonObject)
+                                    callback(weatherCurrent)
+                                }
                                 
-                                weatherCurrent = self.parseCurrentWeather(jsonObject)
                     }
-                    callback(weatherCurrent)
-                    
                 }catch{
                     callback(Weather())
                     
@@ -126,6 +127,7 @@ struct WebServiceManager {
             }
             
         }
+            print("main= \(newWeather.main)")
          return newWeather
     }
 }
