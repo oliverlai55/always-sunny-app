@@ -68,7 +68,7 @@ struct WebServiceManager {
                     for weatherElement in temp{
                         
                         newWeather.main = weatherElement["main"] as? String
-                        newWeather.main = weatherElement["icon"] as? String
+                        newWeather.icon = weatherElement["icon"] as? String
                     }
                 }
             }
@@ -107,15 +107,25 @@ struct WebServiceManager {
                 print("error: \(err)")
             }
         }
-          task.resume()
-}
-
+        task.resume()
+    }
+    
     private func parseCurrentWeather(jsonObject : [String:AnyObject]) -> Weather{
         var newWeather = Weather()
         newWeather.dt = jsonObject["dt"] as? Int
-        if let main = jsonObject["main"] as [String:AnyObject]{
+        if let main = jsonObject["main"] as? [String:AnyObject]{
             newWeather.humidity = main["humidity"] as? Int
-            newWeather.temp_min = main["]
+            newWeather.pressure = main["pressure"] as? Float
+            newWeather.min = main["temp_min"] as? Float
+            newWeather.max = main["temp_max"] as? Float
         }
-        
+        if let weather = jsonObject["weather"] as? [AnyObject] {
+            for element in weather {
+                newWeather.main = element["main"] as? String
+                newWeather.icon = element["icon"] as? String
+            }
+            
+        }
+         return newWeather
+    }
 }
